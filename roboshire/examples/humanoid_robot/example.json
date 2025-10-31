@@ -1,0 +1,62 @@
+{
+  "id": "humanoid_robot",
+  "name": "Humanoid Robot (Simple Biped)",
+  "version": "1.0.0",
+  "author": "RobotStudio Team",
+  "description": "A simplified humanoid robot with upper body (torso, head, arms) and lower body (legs) for bipedal locomotion research. Features 12 degrees of freedom with realistic proportions. Perfect for learning about bipedal walking, balance control, and human-robot interaction.",
+  "category": "Humanoid Robotics",
+  "difficulty": "advanced",
+  "license": "MIT",
+  "tags": [
+    "humanoid",
+    "biped",
+    "walking",
+    "balance",
+    "manipulation",
+    "human-robot-interaction",
+    "locomotion"
+  ],
+  "features": [
+    "12 degrees of freedom (shoulders, elbows, hips, knees)",
+    "Upper body: torso, head, 2 arms",
+    "Lower body: pelvis, 2 legs",
+    "Realistic human proportions (1.5m tall)",
+    "Center of mass at pelvis for balance",
+    "Lifecycle controllers for walking gait",
+    "IMU for balance feedback"
+  ],
+  "requirements": {
+    "ros2_packages": [
+      "ros2_control",
+      "controller_manager",
+      "joint_state_broadcaster",
+      "joint_trajectory_controller"
+    ],
+    "optional_packages": [
+      "gazebo_ros2_control",
+      "moveit2"
+    ]
+  },
+  "use_cases": [
+    "Bipedal locomotion research",
+    "Walking gait development",
+    "Balance and stability control",
+    "Human-robot interaction studies",
+    "Manipulation tasks (grasping)",
+    "Social robotics applications",
+    "Assistive robotics"
+  ],
+  "ros2_compatibility": "Humble, Iron, Rolling",
+  "complexity": {
+    "links": 15,
+    "joints": 12,
+    "dof": 12,
+    "total_mass_kg": 50.0
+  },
+  "files": {
+    "urdf": "robot.urdf",
+    "node_graph": "node_graph.json",
+    "preview": "preview.png",
+    "readme": "README.md"
+  }
+}

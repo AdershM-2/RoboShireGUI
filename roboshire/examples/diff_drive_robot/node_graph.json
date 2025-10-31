@@ -1,0 +1,132 @@
+{
+  "nodes": [
+    {
+      "id": "serial_bridge_1",
+      "type": "SerialBridgeNode",
+      "name": "serial_bridge",
+      "position": {"x": 100, "y": 200},
+      "properties": {
+        "executable": "serial_bridge_node",
+        "package": "simple_pubsub_pkg",
+        "port": "/dev/ttyUSB0",
+        "baudrate": 115200,
+        "timeout": 1.0,
+        "description": "Communicates with Arduino Mega"
+      }
+    },
+    {
+      "id": "imu_sensor_1",
+      "type": "SensorNode",
+      "name": "imu_sensor",
+      "position": {"x": 350, "y": 100},
+      "properties": {
+        "executable": "imu_publisher",
+        "package": "simple_pubsub_pkg",
+        "sensor_type": "imu",
+        "topic_name": "/sensors/imu",
+        "update_rate": 50.0,
+        "description": "Publishes IMU data (acceleration, gyro, orientation)"
+      }
+    },
+    {
+      "id": "ultrasonic_sensor_1",
+      "type": "SensorNode",
+      "name": "ultrasonic_sensor",
+      "position": {"x": 350, "y": 200},
+      "properties": {
+        "executable": "ultrasonic_publisher",
+        "package": "simple_pubsub_pkg",
+        "sensor_type": "ultrasonic",
+        "topic_name": "/sensors/ultrasonic",
+        "update_rate": 10.0,
+        "description": "Publishes distance measurements"
+      }
+    },
+    {
+      "id": "motor_controller_1",
+      "type": "ActuatorNode",
+      "name": "motor_controller",
+      "position": {"x": 350, "y": 300},
+      "properties": {
+        "executable": "motor_controller_node",
+        "package": "simple_pubsub_pkg",
+        "actuator_type": "differential_drive",
+        "cmd_vel_topic": "/cmd_vel",
+        "max_speed": 1.0,
+        "wheel_separation": 0.3,
+        "description": "Controls left and right motors"
+      }
+    },
+    {
+      "id": "obstacle_detector_1",
+      "type": "ProcessingNode",
+      "name": "obstacle_detector",
+      "position": {"x": 600, "y": 150},
+      "properties": {
+        "executable": "obstacle_detector_node",
+        "package": "simple_pubsub_pkg",
+        "detection_threshold": 0.3,
+        "output_topic": "/obstacles/detected",
+        "description": "Detects obstacles from ultrasonic sensor"
+      }
+    },
+    {
+      "id": "navigation_controller_1",
+      "type": "ControlNode",
+      "name": "navigation_controller",
+      "position": {"x": 850, "y": 200},
+      "properties": {
+        "executable": "navigation_controller_node",
+        "package": "simple_pubsub_pkg",
+        "control_mode": "obstacle_avoidance",
+        "forward_speed": 0.3,
+        "turn_speed": 0.5,
+        "description": "Autonomous navigation with obstacle avoidance"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "source": "serial_bridge_1",
+      "source_port": "raw_data",
+      "target": "imu_sensor_1",
+      "target_port": "serial_input"
+    },
+    {
+      "source": "serial_bridge_1",
+      "source_port": "raw_data",
+      "target": "ultrasonic_sensor_1",
+      "target_port": "serial_input"
+    },
+    {
+      "source": "ultrasonic_sensor_1",
+      "source_port": "sensor_data",
+      "target": "obstacle_detector_1",
+      "target_port": "distance_input"
+    },
+    {
+      "source": "obstacle_detector_1",
+      "source_port": "obstacle_output",
+      "target": "navigation_controller_1",
+      "target_port": "obstacle_input"
+    },
+    {
+      "source": "imu_sensor_1",
+      "source_port": "sensor_data",
+      "target": "navigation_controller_1",
+      "target_port": "imu_input"
+    },
+    {
+      "source": "navigation_controller_1",
+      "source_port": "cmd_vel",
+      "target": "motor_controller_1",
+      "target_port": "velocity_command"
+    },
+    {
+      "source": "motor_controller_1",
+      "source_port": "motor_commands",
+      "target": "serial_bridge_1",
+      "target_port": "serial_output"
+    }
+  ]
+}

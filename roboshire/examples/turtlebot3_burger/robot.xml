@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mujoco model="turtlebot3_burger">
+  <compiler angle="radian" meshdir="D:\ROS2_PROJECT\robotstudio\examples\turtlebot3_burger\meshes" autolimits="true" />
+  <option timestep="0.001" gravity="0 0 -9.81" />
+  <default>
+    <geom rgba="0.8 0.6 0.4 1" friction="1 0.5 0.5" />
+  </default>
+  <asset>
+    <material name="light_black" rgba="0.3 0.3 0.3 1.0" />
+    <material name="dark" rgba="0.1 0.1 0.1 1.0" />
+    <material name="red" rgba="0.8 0.2 0.2 1.0" />
+    <material name="dark_blue" rgba="0.1 0.1 0.4 1.0" />
+    <material name="green" rgba="0.2 0.8 0.2 1.0" />
+  </asset>
+  <worldbody>
+    <light diffuse="0.5 0.5 0.5" pos="0 0 3" dir="0 0 -1" />
+    <geom name="floor" type="plane" size="0 0 1" rgba="0.9 0.9 0.9 1" />
+    <body name="base_footprint" pos="0 0 0.5">
+      <freejoint name="base_footprint_freejoint" />
+      <body name="base_link" pos="0.0 0.0 0.010">
+        <inertial mass="1.0" pos="0 0 0" fullinertia="0.001 0.001 0.001 0.0 0.0 0.0" />
+        <geom name="base_link_visual" type="box" group="0" pos="-0.032 0 0.07" size="0.07 0.07 0.0715" material="light_black" />
+        <geom name="base_link_collision" type="box" group="3" rgba="0.5 0.5 0.5 0.3" pos="-0.032 0 0.07" size="0.07 0.07 0.0715" />
+        <body name="wheel_left_link" pos="0.0 0.08 0.023">
+          <joint name="wheel_left_joint" type="hinge" axis="0 1 0" />
+          <inertial mass="0.1" pos="0 0 0" fullinertia="0.000001 0.000001 0.000001 0.0 0.0 0.0" />
+          <geom name="wheel_left_link_visual" type="cylinder" group="0" pos="0 0 0" quat="0.7073882691671998 0.706825181105366 0.0 0.0" size="0.033 0.009" material="dark" />
+          <geom name="wheel_left_link_collision" type="cylinder" group="3" rgba="0.5 0.5 0.5 0.3" pos="0 0 0" quat="0.7073882691671998 0.706825181105366 0.0 0.0" size="0.033 0.009" />
+        </body>
+        <body name="wheel_right_link" pos="0.0 -0.08 0.023">
+          <joint name="wheel_right_joint" type="hinge" axis="0 1 0" />
+          <inertial mass="0.1" pos="0 0 0" fullinertia="0.000001 0.000001 0.000001 0.0 0.0 0.0" />
+          <geom name="wheel_right_link_visual" type="cylinder" group="0" pos="0 0 0" quat="0.7073882691671998 0.706825181105366 0.0 0.0" size="0.033 0.009" material="dark" />
+          <geom name="wheel_right_link_collision" type="cylinder" group="3" rgba="0.5 0.5 0.5 0.3" pos="0 0 0" quat="0.7073882691671998 0.706825181105366 0.0 0.0" size="0.033 0.009" />
+        </body>
+        <body name="caster_back_link" pos="-0.081 0 -0.004">
+          <inertial mass="0.01" pos="0 0 0" fullinertia="0.000001 0.000001 0.000001 0.0 0.0 0.0" />
+          <geom name="caster_back_link_visual" type="sphere" group="0" pos="0 0 0" size="0.005" material="dark" />
+          <geom name="caster_back_link_collision" type="sphere" group="3" rgba="0.5 0.5 0.5 0.3" pos="0 0 0" size="0.005" />
+        </body>
+        <body name="imu_link" pos="-0.032 0 0.068">
+          <inertial mass="0.001" pos="0 0 0" fullinertia="0.000001 0.000001 0.000001 0.0 0.0 0.0" />
+          <geom name="imu_link_visual" type="box" group="0" pos="0 0 0" size="0.0075 0.0075 0.0025" material="red" />
+        </body>
+        <body name="base_scan" pos="-0.032 0 0.171">
+          <inertial mass="0.125" pos="0 0 0" fullinertia="0.00001 0.00001 0.00001 0.0 0.0 0.0" />
+          <geom name="base_scan_visual" type="cylinder" group="0" pos="0 0 0" size="0.035 0.02" material="dark_blue" />
+          <geom name="base_scan_collision" type="cylinder" group="3" rgba="0.5 0.5 0.5 0.3" pos="0 0 0" size="0.035 0.02" />
+        </body>
+        <body name="camera_link" pos="0.070 0 0.080">
+          <inertial mass="0.005" pos="0 0 0" fullinertia="0.000001 0.000001 0.000001 0.0 0.0 0.0" />
+          <geom name="camera_link_visual" type="box" group="0" pos="0 0 0" size="0.0125 0.0125 0.005" material="green" />
+          <body name="camera_optical_link" pos="0 0 0" quat="0.5003981633553667 -0.49999984146591736 0.49960183664463337 -0.49999984146591736" />
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <actuator>
+    <position name="wheel_left_joint_motor" joint="wheel_left_joint" kp="10" />
+    <position name="wheel_right_joint_motor" joint="wheel_right_joint" kp="10" />
+  </actuator>
+  <sensor>
+    <jointpos name="wheel_left_joint_pos" joint="wheel_left_joint" />
+    <jointvel name="wheel_left_joint_vel" joint="wheel_left_joint" />
+    <jointpos name="wheel_right_joint_pos" joint="wheel_right_joint" />
+    <jointvel name="wheel_right_joint_vel" joint="wheel_right_joint" />
+  </sensor>
+</mujoco>

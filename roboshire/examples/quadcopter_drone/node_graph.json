@@ -1,0 +1,410 @@
+{
+  "nodes": {
+    "flight_controller": {
+      "id": "flight_controller",
+      "name": "flight_controller",
+      "node_type": "lifecycle",
+      "position": [400, 200],
+      "properties": {
+        "package_name": "quadcopter_control",
+        "executable_name": "flight_controller",
+        "namespace": "",
+        "remappings": {},
+        "parameters": {
+          "control_rate_hz": 100.0,
+          "attitude_p_roll": 4.5,
+          "attitude_p_pitch": 4.5,
+          "attitude_p_yaw": 2.8,
+          "attitude_d_roll": 0.18,
+          "attitude_d_pitch": 0.18,
+          "position_p_xy": 1.0,
+          "position_d_xy": 0.5,
+          "position_p_z": 5.0,
+          "position_i_z": 2.0,
+          "position_d_z": 0.5,
+          "max_tilt_angle_deg": 30.0,
+          "max_climb_rate_ms": 3.0
+        }
+      },
+      "ports": {
+        "imu_sub": {
+          "id": "imu_sub",
+          "name": "imu_data",
+          "port_type": "input",
+          "data_type": "sensor_msgs/Imu",
+          "connected_to": []
+        },
+        "odom_sub": {
+          "id": "odom_sub",
+          "name": "odom",
+          "port_type": "input",
+          "data_type": "nav_msgs/Odometry",
+          "connected_to": []
+        },
+        "setpoint_sub": {
+          "id": "setpoint_sub",
+          "name": "setpoint",
+          "port_type": "input",
+          "data_type": "geometry_msgs/PoseStamped",
+          "connected_to": []
+        },
+        "motor_cmd_pub": {
+          "id": "motor_cmd_pub",
+          "name": "motor_commands",
+          "port_type": "output",
+          "data_type": "std_msgs/Float64MultiArray",
+          "connected_to": []
+        },
+        "attitude_pub": {
+          "id": "attitude_pub",
+          "name": "attitude_state",
+          "port_type": "output",
+          "data_type": "geometry_msgs/QuaternionStamped",
+          "connected_to": []
+        },
+        "arm_service": {
+          "id": "arm_service",
+          "name": "arm",
+          "port_type": "service_server",
+          "data_type": "std_srvs/SetBool",
+          "connected_to": []
+        },
+        "mode_service": {
+          "id": "mode_service",
+          "name": "set_flight_mode",
+          "port_type": "service_server",
+          "data_type": "std_srvs/SetString",
+          "connected_to": []
+        }
+      }
+    },
+    "state_estimator": {
+      "id": "state_estimator",
+      "name": "state_estimator",
+      "node_type": "standard",
+      "position": [100, 200],
+      "properties": {
+        "package_name": "quadcopter_control",
+        "executable_name": "state_estimator",
+        "namespace": "",
+        "remappings": {},
+        "parameters": {
+          "estimator_type": "ekf",
+          "update_rate_hz": 50.0,
+          "process_noise_acc": 0.5,
+          "process_noise_gyro": 0.02,
+          "measurement_noise_gps": 3.0,
+          "measurement_noise_baro": 1.0
+        }
+      },
+      "ports": {
+        "imu_sub": {
+          "id": "imu_sub",
+          "name": "imu_raw",
+          "port_type": "input",
+          "data_type": "sensor_msgs/Imu",
+          "connected_to": []
+        },
+        "gps_sub": {
+          "id": "gps_sub",
+          "name": "gps_fix",
+          "port_type": "input",
+          "data_type": "sensor_msgs/NavSatFix",
+          "connected_to": []
+        },
+        "baro_sub": {
+          "id": "baro_sub",
+          "name": "barometer",
+          "port_type": "input",
+          "data_type": "sensor_msgs/FluidPressure",
+          "connected_to": []
+        },
+        "imu_filtered_pub": {
+          "id": "imu_filtered_pub",
+          "name": "imu_data",
+          "port_type": "output",
+          "data_type": "sensor_msgs/Imu",
+          "connected_to": ["flight_controller.imu_sub"]
+        },
+        "odom_pub": {
+          "id": "odom_pub",
+          "name": "odom",
+          "port_type": "output",
+          "data_type": "nav_msgs/Odometry",
+          "connected_to": ["flight_controller.odom_sub", "mission_planner.odom_sub"]
+        },
+        "tf_pub": {
+          "id": "tf_pub",
+          "name": "tf",
+          "port_type": "output",
+          "data_type": "tf2_msgs/TFMessage",
+          "connected_to": []
+        }
+      }
+    },
+    "mission_planner": {
+      "id": "mission_planner",
+      "name": "mission_planner",
+      "node_type": "lifecycle",
+      "position": [700, 200],
+      "properties": {
+        "package_name": "quadcopter_control",
+        "executable_name": "mission_planner",
+        "namespace": "",
+        "remappings": {},
+        "parameters": {
+          "waypoint_tolerance_m": 0.5,
+          "max_velocity_ms": 5.0,
+          "path_planner": "a_star",
+          "replan_on_obstacle": true
+        }
+      },
+      "ports": {
+        "odom_sub": {
+          "id": "odom_sub",
+          "name": "odom",
+          "port_type": "input",
+          "data_type": "nav_msgs/Odometry",
+          "connected_to": []
+        },
+        "waypoints_sub": {
+          "id": "waypoints_sub",
+          "name": "waypoints",
+          "port_type": "input",
+          "data_type": "nav_msgs/Path",
+          "connected_to": []
+        },
+        "setpoint_pub": {
+          "id": "setpoint_pub",
+          "name": "setpoint",
+          "port_type": "output",
+          "data_type": "geometry_msgs/PoseStamped",
+          "connected_to": ["flight_controller.setpoint_sub"]
+        },
+        "path_pub": {
+          "id": "path_pub",
+          "name": "planned_path",
+          "port_type": "output",
+          "data_type": "nav_msgs/Path",
+          "connected_to": []
+        },
+        "mission_service": {
+          "id": "mission_service",
+          "name": "upload_mission",
+          "port_type": "service_server",
+          "data_type": "std_srvs/Trigger",
+          "connected_to": []
+        }
+      }
+    },
+    "rc_input_handler": {
+      "id": "rc_input_handler",
+      "name": "rc_input_handler",
+      "node_type": "standard",
+      "position": [400, 50],
+      "properties": {
+        "package_name": "quadcopter_control",
+        "executable_name": "rc_input_handler",
+        "namespace": "",
+        "remappings": {},
+        "parameters": {
+          "rc_input_device": "/dev/input/js0",
+          "throttle_channel": 2,
+          "roll_channel": 0,
+          "pitch_channel": 1,
+          "yaw_channel": 3,
+          "mode_switch_channel": 4,
+          "arm_switch_channel": 5
+        }
+      },
+      "ports": {
+        "joy_sub": {
+          "id": "joy_sub",
+          "name": "joy",
+          "port_type": "input",
+          "data_type": "sensor_msgs/Joy",
+          "connected_to": []
+        },
+        "manual_control_pub": {
+          "id": "manual_control_pub",
+          "name": "manual_control",
+          "port_type": "output",
+          "data_type": "geometry_msgs/Twist",
+          "connected_to": []
+        },
+        "mode_change_pub": {
+          "id": "mode_change_pub",
+          "name": "mode_change",
+          "port_type": "output",
+          "data_type": "std_msgs/String",
+          "connected_to": []
+        }
+      }
+    },
+    "telemetry_logger": {
+      "id": "telemetry_logger",
+      "name": "telemetry_logger",
+      "node_type": "standard",
+      "position": [400, 350],
+      "properties": {
+        "package_name": "quadcopter_control",
+        "executable_name": "telemetry_logger",
+        "namespace": "",
+        "remappings": {},
+        "parameters": {
+          "log_rate_hz": 10.0,
+          "log_directory": "/var/log/quadcopter",
+          "log_format": "csv"
+        }
+      },
+      "ports": {
+        "odom_sub": {
+          "id": "odom_sub",
+          "name": "odom",
+          "port_type": "input",
+          "data_type": "nav_msgs/Odometry",
+          "connected_to": []
+        },
+        "imu_sub": {
+          "id": "imu_sub",
+          "name": "imu_data",
+          "port_type": "input",
+          "data_type": "sensor_msgs/Imu",
+          "connected_to": []
+        },
+        "motor_cmd_sub": {
+          "id": "motor_cmd_sub",
+          "name": "motor_commands",
+          "port_type": "input",
+          "data_type": "std_msgs/Float64MultiArray",
+          "connected_to": []
+        },
+        "battery_sub": {
+          "id": "battery_sub",
+          "name": "battery_state",
+          "port_type": "input",
+          "data_type": "sensor_msgs/BatteryState",
+          "connected_to": []
+        },
+        "diagnostics_pub": {
+          "id": "diagnostics_pub",
+          "name": "diagnostics",
+          "port_type": "output",
+          "data_type": "diagnostic_msgs/DiagnosticArray",
+          "connected_to": []
+        }
+      }
+    },
+    "sensor_simulator": {
+      "id": "sensor_simulator",
+      "name": "sensor_simulator",
+      "node_type": "standard",
+      "position": [100, 50],
+      "properties": {
+        "package_name": "quadcopter_control",
+        "executable_name": "sensor_simulator",
+        "namespace": "",
+        "remappings": {},
+        "parameters": {
+          "simulate_gps": true,
+          "simulate_barometer": true,
+          "gps_noise_stddev": 2.0,
+          "baro_noise_stddev": 0.5
+        }
+      },
+      "ports": {
+        "imu_pub": {
+          "id": "imu_pub",
+          "name": "imu_raw",
+          "port_type": "output",
+          "data_type": "sensor_msgs/Imu",
+          "connected_to": ["state_estimator.imu_sub"]
+        },
+        "gps_pub": {
+          "id": "gps_pub",
+          "name": "gps_fix",
+          "port_type": "output",
+          "data_type": "sensor_msgs/NavSatFix",
+          "connected_to": ["state_estimator.gps_sub"]
+        },
+        "baro_pub": {
+          "id": "baro_pub",
+          "name": "barometer",
+          "port_type": "output",
+          "data_type": "sensor_msgs/FluidPressure",
+          "connected_to": ["state_estimator.baro_sub"]
+        },
+        "battery_pub": {
+          "id": "battery_pub",
+          "name": "battery_state",
+          "port_type": "output",
+          "data_type": "sensor_msgs/BatteryState",
+          "connected_to": ["telemetry_logger.battery_sub"]
+        }
+      }
+    }
+  },
+  "connections": [
+    {
+      "source_node": "sensor_simulator",
+      "source_port": "imu_pub",
+      "target_node": "state_estimator",
+      "target_port": "imu_sub"
+    },
+    {
+      "source_node": "sensor_simulator",
+      "source_port": "gps_pub",
+      "target_node": "state_estimator",
+      "target_port": "gps_sub"
+    },
+    {
+      "source_node": "sensor_simulator",
+      "source_port": "baro_pub",
+      "target_node": "state_estimator",
+      "target_port": "baro_sub"
+    },
+    {
+      "source_node": "state_estimator",
+      "source_port": "imu_filtered_pub",
+      "target_node": "flight_controller",
+      "target_port": "imu_sub"
+    },
+    {
+      "source_node": "state_estimator",
+      "source_port": "odom_pub",
+      "target_node": "flight_controller",
+      "target_port": "odom_sub"
+    },
+    {
+      "source_node": "state_estimator",
+      "source_port": "odom_pub",
+      "target_node": "mission_planner",
+      "target_port": "odom_sub"
+    },
+    {
+      "source_node": "mission_planner",
+      "source_port": "setpoint_pub",
+      "target_node": "flight_controller",
+      "target_port": "setpoint_sub"
+    },
+    {
+      "source_node": "sensor_simulator",
+      "source_port": "battery_pub",
+      "target_node": "telemetry_logger",
+      "target_port": "battery_sub"
+    }
+  ],
+  "metadata": {
+    "name": "Quadcopter Flight Control System",
+    "description": "Complete PX4-style flight control architecture with sensor fusion, autonomous mission planning, and telemetry",
+    "version": "1.0.0",
+    "author": "RobotStudio Team",
+    "flight_modes": [
+      "manual",
+      "stabilize",
+      "altitude_hold",
+      "position_hold",
+      "auto_mission"
+    ]
+  }
+}

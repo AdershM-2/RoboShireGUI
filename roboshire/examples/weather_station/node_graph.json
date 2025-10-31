@@ -1,0 +1,138 @@
+{
+  "nodes": [
+    {
+      "id": "serial_bridge_1",
+      "type": "SerialBridgeNode",
+      "name": "serial_bridge",
+      "position": {"x": 100, "y": 100},
+      "properties": {
+        "executable": "serial_bridge_node",
+        "package": "simple_pubsub_pkg",
+        "port": "/dev/ttyUSB0",
+        "baudrate": 115200,
+        "timeout": 1.0,
+        "description": "Reads data from ESP32 via serial port"
+      }
+    },
+    {
+      "id": "temperature_sensor_1",
+      "type": "SensorNode",
+      "name": "temperature_sensor",
+      "position": {"x": 350, "y": 50},
+      "properties": {
+        "executable": "temperature_publisher",
+        "package": "simple_pubsub_pkg",
+        "sensor_type": "temperature",
+        "topic_name": "/weather/temperature",
+        "update_rate": 1.0,
+        "description": "Publishes temperature readings from DHT22"
+      }
+    },
+    {
+      "id": "humidity_sensor_1",
+      "type": "SensorNode",
+      "name": "humidity_sensor",
+      "position": {"x": 350, "y": 150},
+      "properties": {
+        "executable": "humidity_publisher",
+        "package": "simple_pubsub_pkg",
+        "sensor_type": "humidity",
+        "topic_name": "/weather/humidity",
+        "update_rate": 1.0,
+        "description": "Publishes humidity readings from DHT22"
+      }
+    },
+    {
+      "id": "pressure_sensor_1",
+      "type": "SensorNode",
+      "name": "pressure_sensor",
+      "position": {"x": 350, "y": 250},
+      "properties": {
+        "executable": "pressure_publisher",
+        "package": "simple_pubsub_pkg",
+        "sensor_type": "pressure",
+        "topic_name": "/weather/pressure",
+        "update_rate": 1.0,
+        "description": "Publishes pressure readings from BMP280"
+      }
+    },
+    {
+      "id": "light_sensor_1",
+      "type": "SensorNode",
+      "name": "light_sensor",
+      "position": {"x": 350, "y": 350},
+      "properties": {
+        "executable": "light_publisher",
+        "package": "simple_pubsub_pkg",
+        "sensor_type": "light",
+        "topic_name": "/weather/light",
+        "update_rate": 1.0,
+        "description": "Publishes light level readings"
+      }
+    },
+    {
+      "id": "data_logger_1",
+      "type": "LoggerNode",
+      "name": "weather_logger",
+      "position": {"x": 600, "y": 200},
+      "properties": {
+        "executable": "data_logger_node",
+        "package": "simple_pubsub_pkg",
+        "log_file": "~/weather_data.csv",
+        "log_format": "csv",
+        "include_timestamp": true,
+        "description": "Logs all weather data to CSV file"
+      }
+    }
+  ],
+  "connections": [
+    {
+      "source": "serial_bridge_1",
+      "source_port": "raw_data",
+      "target": "temperature_sensor_1",
+      "target_port": "serial_input"
+    },
+    {
+      "source": "serial_bridge_1",
+      "source_port": "raw_data",
+      "target": "humidity_sensor_1",
+      "target_port": "serial_input"
+    },
+    {
+      "source": "serial_bridge_1",
+      "source_port": "raw_data",
+      "target": "pressure_sensor_1",
+      "target_port": "serial_input"
+    },
+    {
+      "source": "serial_bridge_1",
+      "source_port": "raw_data",
+      "target": "light_sensor_1",
+      "target_port": "serial_input"
+    },
+    {
+      "source": "temperature_sensor_1",
+      "source_port": "sensor_data",
+      "target": "data_logger_1",
+      "target_port": "temperature"
+    },
+    {
+      "source": "humidity_sensor_1",
+      "source_port": "sensor_data",
+      "target": "data_logger_1",
+      "target_port": "humidity"
+    },
+    {
+      "source": "pressure_sensor_1",
+      "source_port": "sensor_data",
+      "target": "data_logger_1",
+      "target_port": "pressure"
+    },
+    {
+      "source": "light_sensor_1",
+      "source_port": "sensor_data",
+      "target": "data_logger_1",
+      "target_port": "light"
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "name": "6-DOF Robotic Arm",
+  "id": "robotic_arm_6dof",
+  "version": "1.0.0",
+  "category": "Manipulators",
+  "difficulty": "intermediate",
+  "description": "A 6-axis articulated robot arm perfect for pick-and-place, assembly, and manipulation tasks.",
+  "author": "RobotStudio Team",
+  "license": "Apache-2.0",
+  "tags": ["manipulator", "arm", "6dof", "pick-and-place", "industrial", "articulated"],
+  "files": {
+    "urdf": "robot.urdf",
+    "node_graph": "node_graph.json",
+    "preview": "preview.png",
+    "documentation": "README.md"
+  },
+  "features": [
+    "6 revolute joints for full workspace coverage",
+    "Gripper end-effector for grasping",
+    "Joint position and velocity control",
+    "Forward and inverse kinematics ready",
+    "MoveIt2 motion planning compatible",
+    "Trajectory execution capability",
+    "Compact desktop form factor"
+  ],
+  "requirements": {
+    "ros2_packages": [
+      "geometry_msgs",
+      "sensor_msgs",
+      "trajectory_msgs",
+      "control_msgs"
+    ],
+    "optional_packages": [
+      "moveit2",
+      "ros2_control",
+      "gazebo_ros_pkgs"
+    ]
+  },
+  "nodes": [
+    {
+      "name": "joint_state_publisher",
+      "type": "publisher",
+      "description": "Publishes current joint positions and velocities"
+    },
+    {
+      "name": "joint_controller",
+      "type": "lifecycle",
+      "description": "Controls joint positions via trajectory commands"
+    },
+    {
+      "name": "gripper_controller",
+      "type": "lifecycle",
+      "description": "Controls gripper open/close"
+    },
+    {
+      "name": "trajectory_executor",
+      "type": "subscriber",
+      "description": "Executes joint trajectory commands"
+    }
+  ],
+  "use_cases": [
+    "Pick-and-place automation",
+    "Assembly line tasks",
+    "Material handling",
+    "Research and education",
+    "Laboratory automation",
+    "Small-scale manufacturing",
+    "Learning robot kinematics and control"
+  ]
+}

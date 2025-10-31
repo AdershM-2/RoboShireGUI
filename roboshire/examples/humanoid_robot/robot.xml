@@ -1,0 +1,175 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mujoco model="humanoid_robot">
+  <compiler angle="radian" meshdir="D:\ROS2_PROJECT\robotstudio\examples\humanoid_robot\meshes" autolimits="true" />
+  <option timestep="0.001" gravity="0 0 -9.81" />
+  <default>
+    <geom rgba="0.8 0.6 0.4 1" friction="1 0.5 0.5" />
+  </default>
+  <asset>
+    <material name="pelvis_color" rgba="0.7 0.7 0.7 1.0" />
+    <material name="body_color" rgba="0.8 0.8 0.8 1.0" />
+    <material name="head_color" rgba="0.9 0.8 0.7 1.0" />
+    <material name="sensor_color" rgba="0.8 0.2 0.2 1.0" />
+    <material name="joint_color" rgba="0.3 0.3 0.3 1.0" />
+    <material name="arm_color" rgba="0.7 0.7 0.7 1.0" />
+    <material name="hand_color" rgba="0.9 0.8 0.7 1.0" />
+    <material name="leg_color" rgba="0.2 0.2 0.8 1.0" />
+    <material name="foot_color" rgba="0.3 0.3 0.3 1.0" />
+  </asset>
+  <worldbody>
+    <light diffuse="0.5 0.5 0.5" pos="0 0 3" dir="0 0 -1" />
+    <geom name="floor" type="plane" size="0 0 1" rgba="0.9 0.9 0.9 1" />
+    <body name="base_link" pos="0 0 0.5">
+      <freejoint name="base_link_freejoint" />
+      <inertial mass="5.0" pos="0 0 0" fullinertia="0.018 0.023 0.027 0.0 0.0 0.0" />
+      <geom name="base_link_visual" type="box" group="0" pos="0 0 0" size="0.15 0.1 0.075" material="pelvis_color" />
+      <geom name="base_link_collision" type="box" group="3" rgba="0.5 0.5 0.5 0.3" pos="0 0 0" size="0.15 0.1 0.075" />
+      <body name="torso" pos="0 0 0.075">
+        <inertial mass="20.0" pos="0 0 0.25" fullinertia="0.533 0.616 0.208 0.0 0.0 0.0" />
+        <geom name="torso_visual" type="box" group="0" pos="0 0 0.25" size="0.175 0.125 0.25" material="body_color" />
+        <geom name="torso_collision" type="box" group="3" rgba="0.5 0.5 0.5 0.3" pos="0 0 0.25" size="0.175 0.125 0.25" />
+        <body name="head" pos="0 0 0.6">
+          <joint name="neck_pitch" type="hinge" axis="0 1 0" range="-0.785 0.785" damping="0.5" frictionloss="0.1" />
+          <inertial mass="4.0" pos="0 0 0" fullinertia="0.036 0.036 0.036 0.0 0.0 0.0" />
+          <geom name="head_visual" type="sphere" group="0" pos="0 0 0" size="0.15" material="head_color" />
+          <geom name="head_collision" type="sphere" group="3" rgba="0.5 0.5 0.5 0.3" pos="0 0 0" size="0.15" />
+        </body>
+        <body name="imu_link" pos="0 0 0.25">
+          <inertial mass="0.01" pos="0 0 0" fullinertia="0.00001 0.00001 0.00001 0.0 0.0 0.0" />
+          <geom name="imu_link_visual" type="box" group="0" pos="0 0 0" size="0.01 0.01 0.005" material="sensor_color" />
+        </body>
+        <body name="left_shoulder" pos="0 0.2 0.45">
+          <joint name="left_shoulder_pitch" type="hinge" axis="0 1 0" range="-3.14 3.14" damping="0.5" frictionloss="0.1" />
+          <inertial mass="0.5" pos="0 0 0" fullinertia="0.001 0.001 0.001 0.0 0.0 0.0" />
+          <geom name="left_shoulder_visual" type="sphere" group="0" pos="0 0 0" size="0.05" material="joint_color" />
+          <body name="left_upper_arm" pos="0 0 0">
+            <joint name="left_shoulder_roll" type="hinge" axis="1 0 0" range="-1.57 1.57" damping="0.5" frictionloss="0.1" />
+            <inertial mass="2.0" pos="0 0.15 0" fullinertia="0.016 0.001 0.016 0.0 0.0 0.0" />
+            <geom name="left_upper_arm_visual" type="cylinder" group="0" pos="0 0.15 0" size="0.05 0.15" material="arm_color" />
+            <geom name="left_upper_arm_collision" type="cylinder" group="3" rgba="0.5 0.5 0.5 0.3" pos="0 0.15 0" size="0.05 0.15" />
+            <body name="left_lower_arm" pos="0 0.3 0">
+              <joint name="left_elbow" type="hinge" axis="0 1 0" range="0 2.618" damping="0.5" frictionloss="0.1" />
+              <inertial mass="1.5" pos="0 0.125 0" fullinertia="0.008 0.001 0.008 0.0 0.0 0.0" />
+              <geom name="left_lower_arm_visual" type="cylinder" group="0" pos="0 0.125 0" size="0.04 0.125" material="arm_color" />
+              <geom name="left_lower_arm_collision" type="cylinder" group="3" rgba="0.5 0.5 0.5 0.3" pos="0 0.125 0" size="0.04 0.125" />
+              <body name="left_hand" pos="0 0.25 0">
+                <inertial mass="0.3" pos="0 0.05 0" fullinertia="0.0003 0.0002 0.0002 0.0 0.0 0.0" />
+                <geom name="left_hand_visual" type="box" group="0" pos="0 0.05 0" size="0.04 0.05 0.01" material="hand_color" />
+                <geom name="left_hand_collision" type="box" group="3" rgba="0.5 0.5 0.5 0.3" pos="0 0.05 0" size="0.04 0.05 0.01" />
+              </body>
+            </body>
+          </body>
+        </body>
+        <body name="right_shoulder" pos="0 -0.2 0.45">
+          <joint name="right_shoulder_pitch" type="hinge" axis="0 1 0" range="-3.14 3.14" damping="0.5" frictionloss="0.1" />
+          <inertial mass="0.5" pos="0 0 0" fullinertia="0.001 0.001 0.001 0.0 0.0 0.0" />
+          <geom name="right_shoulder_visual" type="sphere" group="0" pos="0 0 0" size="0.05" material="joint_color" />
+          <body name="right_upper_arm" pos="0 0 0">
+            <joint name="right_shoulder_roll" type="hinge" axis="1 0 0" range="-1.57 1.57" damping="0.5" frictionloss="0.1" />
+            <inertial mass="2.0" pos="0 -0.15 0" fullinertia="0.016 0.001 0.016 0.0 0.0 0.0" />
+            <geom name="right_upper_arm_visual" type="cylinder" group="0" pos="0 -0.15 0" size="0.05 0.15" material="arm_color" />
+            <geom name="right_upper_arm_collision" type="cylinder" group="3" rgba="0.5 0.5 0.5 0.3" pos="0 -0.15 0" size="0.05 0.15" />
+            <body name="right_lower_arm" pos="0 -0.3 0">
+              <joint name="right_elbow" type="hinge" axis="0 1 0" range="0 2.618" damping="0.5" frictionloss="0.1" />
+              <inertial mass="1.5" pos="0 -0.125 0" fullinertia="0.008 0.001 0.008 0.0 0.0 0.0" />
+              <geom name="right_lower_arm_visual" type="cylinder" group="0" pos="0 -0.125 0" size="0.04 0.125" material="arm_color" />
+              <geom name="right_lower_arm_collision" type="cylinder" group="3" rgba="0.5 0.5 0.5 0.3" pos="0 -0.125 0" size="0.04 0.125" />
+              <body name="right_hand" pos="0 -0.25 0">
+                <inertial mass="0.3" pos="0 -0.05 0" fullinertia="0.0003 0.0002 0.0002 0.0 0.0 0.0" />
+                <geom name="right_hand_visual" type="box" group="0" pos="0 -0.05 0" size="0.04 0.05 0.01" material="hand_color" />
+                <geom name="right_hand_collision" type="box" group="3" rgba="0.5 0.5 0.5 0.3" pos="0 -0.05 0" size="0.04 0.05 0.01" />
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="left_hip" pos="0 0.1 -0.075">
+        <joint name="left_hip_pitch" type="hinge" axis="0 1 0" range="-2.094 2.094" damping="1.0" frictionloss="0.5" />
+        <inertial mass="1.0" pos="0 0 0" fullinertia="0.001 0.001 0.001 0.0 0.0 0.0" />
+        <geom name="left_hip_visual" type="sphere" group="0" pos="0 0 0" size="0.06" material="joint_color" />
+        <body name="left_upper_leg" pos="0 0 0">
+          <joint name="left_hip_roll" type="hinge" axis="1 0 0" range="-0.785 0.785" damping="1.0" frictionloss="0.5" />
+          <inertial mass="4.0" pos="0 0 -0.2" fullinertia="0.054 0.054 0.007 0.0 0.0 0.0" />
+          <geom name="left_upper_leg_visual" type="cylinder" group="0" pos="0 0 -0.2" size="0.06 0.2" material="leg_color" />
+          <geom name="left_upper_leg_collision" type="cylinder" group="3" rgba="0.5 0.5 0.5 0.3" pos="0 0 -0.2" size="0.06 0.2" />
+          <body name="left_lower_leg" pos="0 0 -0.4">
+            <joint name="left_knee" type="hinge" axis="0 1 0" range="0 2.618" damping="1.0" frictionloss="0.5" />
+            <inertial mass="3.0" pos="0 0 -0.2" fullinertia="0.041 0.041 0.004 0.0 0.0 0.0" />
+            <geom name="left_lower_leg_visual" type="cylinder" group="0" pos="0 0 -0.2" size="0.05 0.2" material="leg_color" />
+            <geom name="left_lower_leg_collision" type="cylinder" group="3" rgba="0.5 0.5 0.5 0.3" pos="0 0 -0.2" size="0.05 0.2" />
+            <body name="left_foot" pos="0 0 -0.4">
+              <inertial mass="1.0" pos="0.08 0 -0.04" fullinertia="0.002 0.006 0.007 0.0 0.0 0.0" />
+              <geom name="left_foot_visual" type="box" group="0" pos="0.08 0 -0.04" size="0.125 0.06 0.04" material="foot_color" />
+              <geom name="left_foot_collision" type="box" group="3" rgba="0.5 0.5 0.5 0.3" pos="0.08 0 -0.04" size="0.125 0.06 0.04" />
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="right_hip" pos="0 -0.1 -0.075">
+        <joint name="right_hip_pitch" type="hinge" axis="0 1 0" range="-2.094 2.094" damping="1.0" frictionloss="0.5" />
+        <inertial mass="1.0" pos="0 0 0" fullinertia="0.001 0.001 0.001 0.0 0.0 0.0" />
+        <geom name="right_hip_visual" type="sphere" group="0" pos="0 0 0" size="0.06" material="joint_color" />
+        <body name="right_upper_leg" pos="0 0 0">
+          <joint name="right_hip_roll" type="hinge" axis="1 0 0" range="-0.785 0.785" damping="1.0" frictionloss="0.5" />
+          <inertial mass="4.0" pos="0 0 -0.2" fullinertia="0.054 0.054 0.007 0.0 0.0 0.0" />
+          <geom name="right_upper_leg_visual" type="cylinder" group="0" pos="0 0 -0.2" size="0.06 0.2" material="leg_color" />
+          <geom name="right_upper_leg_collision" type="cylinder" group="3" rgba="0.5 0.5 0.5 0.3" pos="0 0 -0.2" size="0.06 0.2" />
+          <body name="right_lower_leg" pos="0 0 -0.4">
+            <joint name="right_knee" type="hinge" axis="0 1 0" range="0 2.618" damping="1.0" frictionloss="0.5" />
+            <inertial mass="3.0" pos="0 0 -0.2" fullinertia="0.041 0.041 0.004 0.0 0.0 0.0" />
+            <geom name="right_lower_leg_visual" type="cylinder" group="0" pos="0 0 -0.2" size="0.05 0.2" material="leg_color" />
+            <geom name="right_lower_leg_collision" type="cylinder" group="3" rgba="0.5 0.5 0.5 0.3" pos="0 0 -0.2" size="0.05 0.2" />
+            <body name="right_foot" pos="0 0 -0.4">
+              <inertial mass="1.0" pos="0.08 0 -0.04" fullinertia="0.002 0.006 0.007 0.0 0.0 0.0" />
+              <geom name="right_foot_visual" type="box" group="0" pos="0.08 0 -0.04" size="0.125 0.06 0.04" material="foot_color" />
+              <geom name="right_foot_collision" type="box" group="3" rgba="0.5 0.5 0.5 0.3" pos="0.08 0 -0.04" size="0.125 0.06 0.04" />
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <actuator>
+    <position name="neck_pitch_motor" joint="neck_pitch" kp="10" ctrlrange="-20.0 20.0" />
+    <position name="left_shoulder_pitch_motor" joint="left_shoulder_pitch" kp="10" ctrlrange="-30.0 30.0" />
+    <position name="left_shoulder_roll_motor" joint="left_shoulder_roll" kp="10" ctrlrange="-30.0 30.0" />
+    <position name="left_elbow_motor" joint="left_elbow" kp="10" ctrlrange="-20.0 20.0" />
+    <position name="right_shoulder_pitch_motor" joint="right_shoulder_pitch" kp="10" ctrlrange="-30.0 30.0" />
+    <position name="right_shoulder_roll_motor" joint="right_shoulder_roll" kp="10" ctrlrange="-30.0 30.0" />
+    <position name="right_elbow_motor" joint="right_elbow" kp="10" ctrlrange="-20.0 20.0" />
+    <position name="left_hip_pitch_motor" joint="left_hip_pitch" kp="10" ctrlrange="-100.0 100.0" />
+    <position name="left_hip_roll_motor" joint="left_hip_roll" kp="10" ctrlrange="-100.0 100.0" />
+    <position name="left_knee_motor" joint="left_knee" kp="10" ctrlrange="-100.0 100.0" />
+    <position name="right_hip_pitch_motor" joint="right_hip_pitch" kp="10" ctrlrange="-100.0 100.0" />
+    <position name="right_hip_roll_motor" joint="right_hip_roll" kp="10" ctrlrange="-100.0 100.0" />
+    <position name="right_knee_motor" joint="right_knee" kp="10" ctrlrange="-100.0 100.0" />
+  </actuator>
+  <sensor>
+    <jointpos name="neck_pitch_pos" joint="neck_pitch" />
+    <jointvel name="neck_pitch_vel" joint="neck_pitch" />
+    <jointpos name="left_shoulder_pitch_pos" joint="left_shoulder_pitch" />
+    <jointvel name="left_shoulder_pitch_vel" joint="left_shoulder_pitch" />
+    <jointpos name="left_shoulder_roll_pos" joint="left_shoulder_roll" />
+    <jointvel name="left_shoulder_roll_vel" joint="left_shoulder_roll" />
+    <jointpos name="left_elbow_pos" joint="left_elbow" />
+    <jointvel name="left_elbow_vel" joint="left_elbow" />
+    <jointpos name="right_shoulder_pitch_pos" joint="right_shoulder_pitch" />
+    <jointvel name="right_shoulder_pitch_vel" joint="right_shoulder_pitch" />
+    <jointpos name="right_shoulder_roll_pos" joint="right_shoulder_roll" />
+    <jointvel name="right_shoulder_roll_vel" joint="right_shoulder_roll" />
+    <jointpos name="right_elbow_pos" joint="right_elbow" />
+    <jointvel name="right_elbow_vel" joint="right_elbow" />
+    <jointpos name="left_hip_pitch_pos" joint="left_hip_pitch" />
+    <jointvel name="left_hip_pitch_vel" joint="left_hip_pitch" />
+    <jointpos name="left_hip_roll_pos" joint="left_hip_roll" />
+    <jointvel name="left_hip_roll_vel" joint="left_hip_roll" />
+    <jointpos name="left_knee_pos" joint="left_knee" />
+    <jointvel name="left_knee_vel" joint="left_knee" />
+    <jointpos name="right_hip_pitch_pos" joint="right_hip_pitch" />
+    <jointvel name="right_hip_pitch_vel" joint="right_hip_pitch" />
+    <jointpos name="right_hip_roll_pos" joint="right_hip_roll" />
+    <jointvel name="right_hip_roll_vel" joint="right_hip_roll" />
+    <jointpos name="right_knee_pos" joint="right_knee" />
+    <jointvel name="right_knee_vel" joint="right_knee" />
+  </sensor>
+</mujoco>

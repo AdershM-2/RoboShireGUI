@@ -1,0 +1,76 @@
+{
+  "name": "TurtleBot3 Burger",
+  "id": "turtlebot3_burger",
+  "version": "1.0.0",
+  "category": "Mobile Robots",
+  "difficulty": "intermediate",
+  "description": "Industry-standard mobile robot platform with 360° LiDAR, perfect for SLAM, navigation, and autonomous robotics research.",
+  "author": "RobotStudio Team (Based on ROBOTIS TurtleBot3)",
+  "license": "Apache-2.0",
+  "tags": ["mobile", "turtlebot", "lidar", "slam", "navigation", "research", "autonomous"],
+  "files": {
+    "urdf": "robot.urdf",
+    "node_graph": "node_graph.json",
+    "preview": "preview.png",
+    "documentation": "README.md"
+  },
+  "features": [
+    "360° LDS-01 LiDAR sensor (12m range)",
+    "9-axis IMU for odometry fusion",
+    "Raspberry Pi camera module",
+    "OpenCR1.0 controller board",
+    "Differential drive with precise encoders",
+    "Compatible with ROS2 Nav2 stack",
+    "SLAM Toolbox ready",
+    "Compact design (138mm diameter)"
+  ],
+  "requirements": {
+    "ros2_packages": [
+      "geometry_msgs",
+      "sensor_msgs",
+      "nav_msgs",
+      "tf2_ros"
+    ],
+    "optional_packages": [
+      "nav2_bringup",
+      "slam_toolbox",
+      "gazebo_ros_pkgs"
+    ]
+  },
+  "nodes": [
+    {
+      "name": "base_controller",
+      "type": "lifecycle",
+      "description": "Controls wheel motors with velocity commands"
+    },
+    {
+      "name": "odometry_fusion",
+      "type": "lifecycle",
+      "description": "Fuses wheel odometry and IMU data"
+    },
+    {
+      "name": "lidar_driver",
+      "type": "lifecycle",
+      "description": "Publishes LiDAR scan data"
+    },
+    {
+      "name": "imu_publisher",
+      "type": "publisher",
+      "description": "Publishes IMU sensor data"
+    },
+    {
+      "name": "camera_node",
+      "type": "publisher",
+      "description": "Publishes camera images"
+    }
+  ],
+  "use_cases": [
+    "Indoor autonomous navigation",
+    "SLAM mapping and localization",
+    "Research and education",
+    "Delivery and logistics robots",
+    "Multi-robot systems",
+    "Swarm robotics experiments",
+    "ROS2 learning and development"
+  ]
+}

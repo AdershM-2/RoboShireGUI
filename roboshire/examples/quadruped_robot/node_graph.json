@@ -1,0 +1,199 @@
+{
+  "nodes": {
+    "gait_controller": {
+      "id": "gait_controller",
+      "name": "gait_controller",
+      "node_type": "lifecycle",
+      "position": [100, 100],
+      "properties": {
+        "package_name": "quadruped_control",
+        "executable_name": "gait_controller",
+        "namespace": "",
+        "remappings": {},
+        "parameters": {
+          "gait_type": "walk",
+          "step_frequency": 1.0,
+          "step_height": 0.05,
+          "body_height": 0.4
+        }
+      },
+      "ports": {
+        "imu_sub": {
+          "id": "imu_sub",
+          "name": "imu_data",
+          "port_type": "input",
+          "data_type": "sensor_msgs/Imu",
+          "connected_to": []
+        },
+        "joint_cmd_pub": {
+          "id": "joint_cmd_pub",
+          "name": "joint_commands",
+          "port_type": "output",
+          "data_type": "sensor_msgs/JointState",
+          "connected_to": ["joint_state_broadcaster.joint_cmd_sub"]
+        },
+        "gait_params_service": {
+          "id": "gait_params_service",
+          "name": "set_gait_params",
+          "port_type": "service_server",
+          "data_type": "std_srvs/SetParameters",
+          "connected_to": []
+        }
+      }
+    },
+    "joint_state_broadcaster": {
+      "id": "joint_state_broadcaster",
+      "name": "joint_state_broadcaster",
+      "node_type": "standard",
+      "position": [400, 100],
+      "properties": {
+        "package_name": "quadruped_control",
+        "executable_name": "joint_state_broadcaster",
+        "namespace": "",
+        "remappings": {},
+        "parameters": {
+          "publish_rate": 50.0
+        }
+      },
+      "ports": {
+        "joint_cmd_sub": {
+          "id": "joint_cmd_sub",
+          "name": "joint_commands",
+          "port_type": "input",
+          "data_type": "sensor_msgs/JointState",
+          "connected_to": []
+        },
+        "joint_state_pub": {
+          "id": "joint_state_pub",
+          "name": "joint_states",
+          "port_type": "output",
+          "data_type": "sensor_msgs/JointState",
+          "connected_to": ["odometry_node.joint_state_sub"]
+        },
+        "tf_pub": {
+          "id": "tf_pub",
+          "name": "tf",
+          "port_type": "output",
+          "data_type": "tf2_msgs/TFMessage",
+          "connected_to": []
+        }
+      }
+    },
+    "odometry_node": {
+      "id": "odometry_node",
+      "name": "odometry_node",
+      "node_type": "standard",
+      "position": [700, 100],
+      "properties": {
+        "package_name": "quadruped_control",
+        "executable_name": "odometry_node",
+        "namespace": "",
+        "remappings": {},
+        "parameters": {
+          "base_frame": "base_link",
+          "odom_frame": "odom",
+          "publish_rate": 20.0
+        }
+      },
+      "ports": {
+        "joint_state_sub": {
+          "id": "joint_state_sub",
+          "name": "joint_states",
+          "port_type": "input",
+          "data_type": "sensor_msgs/JointState",
+          "connected_to": []
+        },
+        "odom_pub": {
+          "id": "odom_pub",
+          "name": "odom",
+          "port_type": "output",
+          "data_type": "nav_msgs/Odometry",
+          "connected_to": []
+        },
+        "odom_tf_pub": {
+          "id": "odom_tf_pub",
+          "name": "odom_tf",
+          "port_type": "output",
+          "data_type": "tf2_msgs/TFMessage",
+          "connected_to": []
+        }
+      }
+    },
+    "lifecycle_manager": {
+      "id": "lifecycle_manager",
+      "name": "lifecycle_manager",
+      "node_type": "lifecycle",
+      "position": [100, 300],
+      "properties": {
+        "package_name": "quadruped_control",
+        "executable_name": "lifecycle_manager",
+        "namespace": "",
+        "remappings": {},
+        "parameters": {
+          "managed_nodes": ["gait_controller"],
+          "autostart": true
+        }
+      },
+      "ports": {
+        "manager_state_pub": {
+          "id": "manager_state_pub",
+          "name": "manager_state",
+          "port_type": "output",
+          "data_type": "lifecycle_msgs/TransitionEvent",
+          "connected_to": []
+        }
+      }
+    },
+    "imu_simulator": {
+      "id": "imu_simulator",
+      "name": "imu_simulator",
+      "node_type": "standard",
+      "position": [100, -100],
+      "properties": {
+        "package_name": "quadruped_control",
+        "executable_name": "imu_simulator",
+        "namespace": "",
+        "remappings": {},
+        "parameters": {
+          "publish_rate": 100.0,
+          "noise_stddev": 0.01
+        }
+      },
+      "ports": {
+        "imu_pub": {
+          "id": "imu_pub",
+          "name": "imu_data",
+          "port_type": "output",
+          "data_type": "sensor_msgs/Imu",
+          "connected_to": ["gait_controller.imu_sub"]
+        }
+      }
+    }
+  },
+  "connections": [
+    {
+      "source_node": "gait_controller",
+      "source_port": "joint_cmd_pub",
+      "target_node": "joint_state_broadcaster",
+      "target_port": "joint_cmd_sub"
+    },
+    {
+      "source_node": "joint_state_broadcaster",
+      "source_port": "joint_state_pub",
+      "target_node": "odometry_node",
+      "target_port": "joint_state_sub"
+    },
+    {
+      "source_node": "imu_simulator",
+      "source_port": "imu_pub",
+      "target_node": "gait_controller",
+      "target_port": "imu_sub"
+    }
+  ],
+  "metadata": {
+    "name": "Quadruped Gait Control System",
+    "description": "Complete control system for quadruped robot with gait generation, joint control, and odometry",
+    "version": "1.0.0",
+    "author": "RobotStudio Team"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "id": "quadcopter_drone",
+  "name": "Quadcopter Drone (PX4 Style)",
+  "version": "1.0.0",
+  "author": "RobotStudio Team",
+  "description": "A quadcopter drone with X-configuration inspired by PX4/ArduPilot architecture. Features 4 rotors, IMU, GPS, and flight controller. Perfect for learning about flight dynamics, PID control, and autonomous navigation in 3D space.",
+  "category": "Aerial Robotics",
+  "difficulty": "advanced",
+  "license": "MIT",
+  "tags": [
+    "drone",
+    "quadcopter",
+    "aerial",
+    "UAV",
+    "flight",
+    "multirotor",
+    "px4",
+    "ardupilot"
+  ],
+  "features": [
+    "4 continuous joints (rotor motors)",
+    "X-configuration for stability",
+    "IMU sensor for attitude control",
+    "GPS sensor for position control",
+    "Barometer for altitude measurement",
+    "Flight controller node with PID control",
+    "Autonomous waypoint navigation example"
+  ],
+  "requirements": {
+    "ros2_packages": [
+      "ros2_control",
+      "geometry_msgs",
+      "sensor_msgs",
+      "nav_msgs"
+    ],
+    "optional_packages": [
+      "gazebo_ros2_control",
+      "px4_msgs",
+      "mavros"
+    ]
+  },
+  "use_cases": [
+    "Drone flight control development",
+    "Autonomous navigation and path planning",
+    "Computer vision applications (aerial photography)",
+    "Search and rescue operations",
+    "Package delivery simulation",
+    "Swarm robotics research",
+    "Indoor/outdoor localization"
+  ],
+  "ros2_compatibility": "Humble, Iron, Rolling",
+  "complexity": {
+    "links": 5,
+    "joints": 4,
+    "dof": 6,
+    "total_mass_kg": 1.5
+  },
+  "files": {
+    "urdf": "robot.urdf",
+    "node_graph": "node_graph.json",
+    "preview": "preview.png",
+    "readme": "README.md"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "name": "Simple Differential Drive Robot",
+  "id": "differential_drive",
+  "version": "1.0.0",
+  "category": "Mobile Robots",
+  "difficulty": "beginner",
+  "description": "A simple two-wheeled robot with caster wheel, perfect for learning ROS2 basics and mobile robot control.",
+  "author": "RobotStudio Team",
+  "license": "Apache-2.0",
+  "tags": ["mobile", "wheeled", "beginner", "differential drive", "educational"],
+  "files": {
+    "urdf": "robot.urdf",
+    "node_graph": "node_graph.json",
+    "preview": "preview.png",
+    "documentation": "README.md"
+  },
+  "features": [
+    "Two driven wheels with differential drive kinematics",
+    "Passive caster wheel for stability",
+    "Simple chassis design",
+    "Basic sensor suite (optional IMU)",
+    "Easy to understand and modify"
+  ],
+  "requirements": {
+    "ros2_packages": ["geometry_msgs", "sensor_msgs"],
+    "optional_packages": []
+  },
+  "nodes": [
+    {
+      "name": "velocity_controller",
+      "type": "lifecycle",
+      "description": "Controls wheel velocities based on cmd_vel commands"
+    },
+    {
+      "name": "odometry_publisher",
+      "type": "publisher",
+      "description": "Publishes robot odometry from wheel encoders"
+    },
+    {
+      "name": "cmd_vel_subscriber",
+      "type": "subscriber",
+      "description": "Subscribes to velocity commands"
+    }
+  ],
+  "use_cases": [
+    "Learn ROS2 mobile robotics basics",
+    "Simple navigation experiments",
+    "Educational robotics courses",
+    "Line following robots",
+    "Indoor exploration"
+  ]
+}

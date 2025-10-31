@@ -1,0 +1,422 @@
+{
+  "nodes": {
+    "walking_controller": {
+      "id": "walking_controller",
+      "name": "walking_controller",
+      "node_type": "lifecycle",
+      "position": [400, 150],
+      "properties": {
+        "package_name": "humanoid_control",
+        "executable_name": "walking_controller",
+        "namespace": "",
+        "remappings": {},
+        "parameters": {
+          "gait_type": "walk",
+          "step_length_m": 0.15,
+          "step_height_m": 0.05,
+          "step_frequency_hz": 0.8,
+          "com_height_m": 0.9,
+          "foot_width_m": 0.2
+        }
+      },
+      "ports": {
+        "imu_sub": {
+          "id": "imu_sub",
+          "name": "imu_data",
+          "port_type": "input",
+          "data_type": "sensor_msgs/Imu",
+          "connected_to": []
+        },
+        "joint_state_sub": {
+          "id": "joint_state_sub",
+          "name": "joint_states",
+          "port_type": "input",
+          "data_type": "sensor_msgs/JointState",
+          "connected_to": []
+        },
+        "cmd_vel_sub": {
+          "id": "cmd_vel_sub",
+          "name": "cmd_vel",
+          "port_type": "input",
+          "data_type": "geometry_msgs/Twist",
+          "connected_to": []
+        },
+        "joint_cmd_pub": {
+          "id": "joint_cmd_pub",
+          "name": "joint_commands",
+          "port_type": "output",
+          "data_type": "trajectory_msgs/JointTrajectory",
+          "connected_to": ["joint_state_broadcaster.joint_cmd_sub"]
+        },
+        "gait_phase_pub": {
+          "id": "gait_phase_pub",
+          "name": "gait_phase",
+          "port_type": "output",
+          "data_type": "std_msgs/String",
+          "connected_to": []
+        },
+        "start_walking_service": {
+          "id": "start_walking_service",
+          "name": "start_walking",
+          "port_type": "service_server",
+          "data_type": "std_srvs/Trigger",
+          "connected_to": []
+        },
+        "stop_walking_service": {
+          "id": "stop_walking_service",
+          "name": "stop_walking",
+          "port_type": "service_server",
+          "data_type": "std_srvs/Trigger",
+          "connected_to": []
+        }
+      }
+    },
+    "balance_controller": {
+      "id": "balance_controller",
+      "name": "balance_controller",
+      "node_type": "lifecycle",
+      "position": [100, 150],
+      "properties": {
+        "package_name": "humanoid_control",
+        "executable_name": "balance_controller",
+        "namespace": "",
+        "remappings": {},
+        "parameters": {
+          "attitude_p": 10.0,
+          "attitude_d": 2.0,
+          "com_p": 5.0,
+          "com_i": 0.5,
+          "com_d": 1.0,
+          "ankle_strategy_threshold": 0.1,
+          "hip_strategy_threshold": 0.2,
+          "step_strategy_threshold": 0.4
+        }
+      },
+      "ports": {
+        "imu_sub": {
+          "id": "imu_sub",
+          "name": "imu_data",
+          "port_type": "input",
+          "data_type": "sensor_msgs/Imu",
+          "connected_to": []
+        },
+        "com_state_sub": {
+          "id": "com_state_sub",
+          "name": "com_state",
+          "port_type": "input",
+          "data_type": "geometry_msgs/PointStamped",
+          "connected_to": []
+        },
+        "balance_cmd_pub": {
+          "id": "balance_cmd_pub",
+          "name": "balance_adjustment",
+          "port_type": "output",
+          "data_type": "geometry_msgs/Twist",
+          "connected_to": []
+        },
+        "fall_detected_pub": {
+          "id": "fall_detected_pub",
+          "name": "fall_detected",
+          "port_type": "output",
+          "data_type": "std_msgs/Bool",
+          "connected_to": []
+        }
+      }
+    },
+    "joint_state_broadcaster": {
+      "id": "joint_state_broadcaster",
+      "name": "joint_state_broadcaster",
+      "node_type": "standard",
+      "position": [700, 150],
+      "properties": {
+        "package_name": "humanoid_control",
+        "executable_name": "joint_state_broadcaster",
+        "namespace": "",
+        "remappings": {},
+        "parameters": {
+          "publish_rate": 50.0
+        }
+      },
+      "ports": {
+        "joint_cmd_sub": {
+          "id": "joint_cmd_sub",
+          "name": "joint_commands",
+          "port_type": "input",
+          "data_type": "trajectory_msgs/JointTrajectory",
+          "connected_to": []
+        },
+        "joint_state_pub": {
+          "id": "joint_state_pub",
+          "name": "joint_states",
+          "port_type": "output",
+          "data_type": "sensor_msgs/JointState",
+          "connected_to": ["walking_controller.joint_state_sub", "odometry_estimator.joint_state_sub"]
+        },
+        "tf_pub": {
+          "id": "tf_pub",
+          "name": "tf",
+          "port_type": "output",
+          "data_type": "tf2_msgs/TFMessage",
+          "connected_to": []
+        }
+      }
+    },
+    "odometry_estimator": {
+      "id": "odometry_estimator",
+      "name": "odometry_estimator",
+      "node_type": "standard",
+      "position": [400, 300],
+      "properties": {
+        "package_name": "humanoid_control",
+        "executable_name": "odometry_estimator",
+        "namespace": "",
+        "remappings": {},
+        "parameters": {
+          "base_frame": "base_link",
+          "odom_frame": "odom",
+          "publish_rate": 20.0,
+          "use_foot_contact": true
+        }
+      },
+      "ports": {
+        "joint_state_sub": {
+          "id": "joint_state_sub",
+          "name": "joint_states",
+          "port_type": "input",
+          "data_type": "sensor_msgs/JointState",
+          "connected_to": []
+        },
+        "imu_sub": {
+          "id": "imu_sub",
+          "name": "imu_data",
+          "port_type": "input",
+          "data_type": "sensor_msgs/Imu",
+          "connected_to": []
+        },
+        "foot_contact_sub": {
+          "id": "foot_contact_sub",
+          "name": "foot_contact",
+          "port_type": "input",
+          "data_type": "std_msgs/Bool",
+          "connected_to": []
+        },
+        "odom_pub": {
+          "id": "odom_pub",
+          "name": "odom",
+          "port_type": "output",
+          "data_type": "nav_msgs/Odometry",
+          "connected_to": []
+        },
+        "com_state_pub": {
+          "id": "com_state_pub",
+          "name": "com_state",
+          "port_type": "output",
+          "data_type": "geometry_msgs/PointStamped",
+          "connected_to": ["balance_controller.com_state_sub"]
+        }
+      }
+    },
+    "motion_planner": {
+      "id": "motion_planner",
+      "name": "motion_planner",
+      "node_type": "standard",
+      "position": [100, 300],
+      "properties": {
+        "package_name": "humanoid_control",
+        "executable_name": "motion_planner",
+        "namespace": "",
+        "remappings": {},
+        "parameters": {
+          "planning_frequency": 5.0,
+          "step_planning_horizon": 3,
+          "obstacle_avoidance": true
+        }
+      },
+      "ports": {
+        "goal_sub": {
+          "id": "goal_sub",
+          "name": "goal_pose",
+          "port_type": "input",
+          "data_type": "geometry_msgs/PoseStamped",
+          "connected_to": []
+        },
+        "odom_sub": {
+          "id": "odom_sub",
+          "name": "odom",
+          "port_type": "input",
+          "data_type": "nav_msgs/Odometry",
+          "connected_to": []
+        },
+        "cmd_vel_pub": {
+          "id": "cmd_vel_pub",
+          "name": "cmd_vel",
+          "port_type": "output",
+          "data_type": "geometry_msgs/Twist",
+          "connected_to": ["walking_controller.cmd_vel_sub"]
+        },
+        "planned_path_pub": {
+          "id": "planned_path_pub",
+          "name": "planned_path",
+          "port_type": "output",
+          "data_type": "nav_msgs/Path",
+          "connected_to": []
+        }
+      }
+    },
+    "arm_controller": {
+      "id": "arm_controller",
+      "name": "arm_controller",
+      "node_type": "lifecycle",
+      "position": [700, 300],
+      "properties": {
+        "package_name": "humanoid_control",
+        "executable_name": "arm_controller",
+        "namespace": "",
+        "remappings": {},
+        "parameters": {
+          "control_rate": 50.0,
+          "use_moveit": false,
+          "left_arm_home": [0.0, 0.0, 0.0],
+          "right_arm_home": [0.0, 0.0, 0.0]
+        }
+      },
+      "ports": {
+        "left_arm_goal_sub": {
+          "id": "left_arm_goal_sub",
+          "name": "left_arm_goal",
+          "port_type": "input",
+          "data_type": "trajectory_msgs/JointTrajectory",
+          "connected_to": []
+        },
+        "right_arm_goal_sub": {
+          "id": "right_arm_goal_sub",
+          "name": "right_arm_goal",
+          "port_type": "input",
+          "data_type": "trajectory_msgs/JointTrajectory",
+          "connected_to": []
+        },
+        "arm_cmd_pub": {
+          "id": "arm_cmd_pub",
+          "name": "arm_commands",
+          "port_type": "output",
+          "data_type": "trajectory_msgs/JointTrajectory",
+          "connected_to": []
+        },
+        "gripper_cmd_pub": {
+          "id": "gripper_cmd_pub",
+          "name": "gripper_command",
+          "port_type": "output",
+          "data_type": "std_msgs/Float64",
+          "connected_to": []
+        }
+      }
+    },
+    "sensor_simulator": {
+      "id": "sensor_simulator",
+      "name": "sensor_simulator",
+      "node_type": "standard",
+      "position": [100, 0],
+      "properties": {
+        "package_name": "humanoid_control",
+        "executable_name": "sensor_simulator",
+        "namespace": "",
+        "remappings": {},
+        "parameters": {
+          "imu_rate": 100.0,
+          "imu_noise_stddev": 0.01,
+          "foot_contact_simulation": true
+        }
+      },
+      "ports": {
+        "imu_pub": {
+          "id": "imu_pub",
+          "name": "imu_data",
+          "port_type": "output",
+          "data_type": "sensor_msgs/Imu",
+          "connected_to": ["walking_controller.imu_sub", "balance_controller.imu_sub", "odometry_estimator.imu_sub"]
+        },
+        "foot_contact_pub": {
+          "id": "foot_contact_pub",
+          "name": "foot_contact",
+          "port_type": "output",
+          "data_type": "std_msgs/Bool",
+          "connected_to": ["odometry_estimator.foot_contact_sub"]
+        }
+      }
+    }
+  },
+  "connections": [
+    {
+      "source_node": "sensor_simulator",
+      "source_port": "imu_pub",
+      "target_node": "walking_controller",
+      "target_port": "imu_sub"
+    },
+    {
+      "source_node": "sensor_simulator",
+      "source_port": "imu_pub",
+      "target_node": "balance_controller",
+      "target_port": "imu_sub"
+    },
+    {
+      "source_node": "sensor_simulator",
+      "source_port": "imu_pub",
+      "target_node": "odometry_estimator",
+      "target_port": "imu_sub"
+    },
+    {
+      "source_node": "sensor_simulator",
+      "source_port": "foot_contact_pub",
+      "target_node": "odometry_estimator",
+      "target_port": "foot_contact_sub"
+    },
+    {
+      "source_node": "walking_controller",
+      "source_port": "joint_cmd_pub",
+      "target_node": "joint_state_broadcaster",
+      "target_port": "joint_cmd_sub"
+    },
+    {
+      "source_node": "joint_state_broadcaster",
+      "source_port": "joint_state_pub",
+      "target_node": "walking_controller",
+      "target_port": "joint_state_sub"
+    },
+    {
+      "source_node": "joint_state_broadcaster",
+      "source_port": "joint_state_pub",
+      "target_node": "odometry_estimator",
+      "target_port": "joint_state_sub"
+    },
+    {
+      "source_node": "odometry_estimator",
+      "source_port": "com_state_pub",
+      "target_node": "balance_controller",
+      "target_port": "com_state_sub"
+    },
+    {
+      "source_node": "motion_planner",
+      "source_port": "cmd_vel_pub",
+      "target_node": "walking_controller",
+      "target_port": "cmd_vel_sub"
+    }
+  ],
+  "metadata": {
+    "name": "Humanoid Walking Control System",
+    "description": "Complete bipedal walking control with gait generation, balance control, and manipulation",
+    "version": "1.0.0",
+    "author": "RobotStudio Team",
+    "control_modes": [
+      "standing",
+      "walking",
+      "balancing",
+      "manipulation"
+    ],
+    "dof_breakdown": {
+      "legs": 6,
+      "arms": 6,
+      "head": 1,
+      "total": 13
+    }
+  }
+}

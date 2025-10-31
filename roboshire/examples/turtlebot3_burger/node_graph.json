@@ -1,0 +1,118 @@
+{
+  "nodes": {
+    "node_1": {
+      "id": "node_1",
+      "name": "base_controller",
+      "node_type": "lifecycle",
+      "position": [100, 100],
+      "properties": {
+        "lifecycle_type": "subscriber",
+        "topic": "/cmd_vel",
+        "msg_type": "geometry_msgs/Twist",
+        "queue_size": 10,
+        "auto_start": true,
+        "bond_timeout": 4.0
+      },
+      "ports": {
+        "port_1": {
+          "id": "port_1",
+          "name": "input",
+          "port_type": "input",
+          "data_type": "geometry_msgs/Twist",
+          "connected_to": []
+        }
+      }
+    },
+    "node_2": {
+      "id": "node_2",
+      "name": "odometry_fusion",
+      "node_type": "lifecycle",
+      "position": [100, 250],
+      "properties": {
+        "lifecycle_type": "publisher",
+        "topic": "/odom",
+        "msg_type": "nav_msgs/Odometry",
+        "rate": 50.0,
+        "queue_size": 10,
+        "auto_start": true,
+        "bond_timeout": 4.0
+      },
+      "ports": {
+        "port_2": {
+          "id": "port_2",
+          "name": "output",
+          "port_type": "output",
+          "data_type": "nav_msgs/Odometry",
+          "connected_to": []
+        }
+      }
+    },
+    "node_3": {
+      "id": "node_3",
+      "name": "lidar_driver",
+      "node_type": "lifecycle",
+      "position": [300, 100],
+      "properties": {
+        "lifecycle_type": "publisher",
+        "topic": "/scan",
+        "msg_type": "sensor_msgs/LaserScan",
+        "rate": 5.0,
+        "queue_size": 10,
+        "auto_start": true,
+        "bond_timeout": 4.0
+      },
+      "ports": {
+        "port_3": {
+          "id": "port_3",
+          "name": "output",
+          "port_type": "output",
+          "data_type": "sensor_msgs/LaserScan",
+          "connected_to": []
+        }
+      }
+    },
+    "node_4": {
+      "id": "node_4",
+      "name": "imu_publisher",
+      "node_type": "publisher",
+      "position": [300, 250],
+      "properties": {
+        "topic": "/imu",
+        "msg_type": "sensor_msgs/Imu",
+        "rate": 100.0,
+        "queue_size": 10
+      },
+      "ports": {
+        "port_4": {
+          "id": "port_4",
+          "name": "output",
+          "port_type": "output",
+          "data_type": "sensor_msgs/Imu",
+          "connected_to": []
+        }
+      }
+    },
+    "node_5": {
+      "id": "node_5",
+      "name": "camera_node",
+      "node_type": "publisher",
+      "position": [500, 175],
+      "properties": {
+        "topic": "/camera/image_raw",
+        "msg_type": "sensor_msgs/Image",
+        "rate": 30.0,
+        "queue_size": 5
+      },
+      "ports": {
+        "port_5": {
+          "id": "port_5",
+          "name": "output",
+          "port_type": "output",
+          "data_type": "sensor_msgs/Image",
+          "connected_to": []
+        }
+      }
+    }
+  },
+  "connections": {}
+}
